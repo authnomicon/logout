@@ -1,7 +1,7 @@
+var path = require('path')
+  , ejs = require('ejs');
+
 exports = module.exports = function(store) {
-  var path = require('path')
-    , ejs = require('ejs');
-  
   
   function prompt(req, res, next) {
     res.locals.csrfToken = req.csrfToken();

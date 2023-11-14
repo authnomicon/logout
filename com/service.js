@@ -1,9 +1,9 @@
+var express = require('express');
+
 /**
  * Logout service.
  */
 exports = module.exports = function(promptHandler, actionHandler) {
-  var express = require('express');
-  
   var router = new express.Router();
   router.get('/', promptHandler);
   router.post('/', actionHandler);
