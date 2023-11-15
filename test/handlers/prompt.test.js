@@ -7,7 +7,7 @@ var factory = require('../../com/handlers/prompt');
 
 describe('logout/handlers/prompt', function() {
   
-  it('should return handler', function() {
+  it('should create handler', function() {
     var csurfSpy = sinon.spy();
     var flowstateSpy = sinon.spy();
     var factory = $require('../../com/handlers/prompt', {

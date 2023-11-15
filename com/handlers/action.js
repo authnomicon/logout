@@ -71,6 +71,7 @@ exports = module.exports = function(sloFactory, authenticator, store) {
   ];
 };
 
+// Module annotations.
 exports['@require'] = [
   'module:@authnomicon/logout.SLOServiceFactory?',
   'module:passport.Authenticator',
