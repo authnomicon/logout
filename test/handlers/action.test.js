@@ -30,6 +30,9 @@ describe('logout/handlers/action', function() {
     expect(csurfSpy).to.be.calledBefore(flowstateSpy);
     expect(flowstateSpy).to.be.calledOnce;
     expect(flowstateSpy).to.be.calledWith({ store: store });
+    expect(flowstateSpy).to.be.calledBefore(authenticator.authenticate);
+    expect(authenticator.authenticate).to.be.calledOnce;
+    expect(authenticator.authenticate).to.be.calledWith('session');
   });
   
 });
