@@ -1,3 +1,7 @@
+var defer = typeof setImmediate === 'function'
+  ? setImmediate
+  : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
+
 exports = module.exports = function(sloFactory, authenticator, store) {
   
   function logout(req, res, next) {
@@ -20,6 +24,26 @@ exports = module.exports = function(sloFactory, authenticator, store) {
     if (!sloFactory) { return next(); }
     
     console.log('CONSTRUCT SERVICE!');
+    
+    // TODO: replace these with context from req.authInfo
+    var provider = 'http://localhost:8085'
+      , protocol = 'openidconnect';
+    
+    sloFactory.create(provider, protocol)
+      .then(function(service) {
+        console.log('got service!');
+        console.log(service);
+        
+        var ctx = {}; // TODO: set this to req.authInfo
+        
+        
+        service.logout(ctx, res, next);
+      }, function(err) {
+        console.log('rejected!');
+        console.log(err);
+        
+        defer(next, err);
+      });
     
     //next();
   }

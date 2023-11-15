@@ -28,7 +28,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   ],
-  "main": "./app",
+  "main": "./lib",
   "assembly": {
     "namespace": "org.authnomicon/logout",
     "components": [
@@ -43,7 +43,8 @@
     "csurf": "^1.11.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "flowstate": "^0.6.0"
+    "flowstate": "^0.6.0",
+    "utils-merge": "^1.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4",
