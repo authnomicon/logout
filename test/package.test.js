@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 
 
-describe('@authnomicon/session', function() {
+describe('@authnomicon/logout', function() {
   
   describe('package.json', function() {
     var json = require('../package.json');

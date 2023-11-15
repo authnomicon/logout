@@ -1,16 +1,18 @@
+// Module dependencies.
 var express = require('express');
 
 /**
- * Logout service.
+ * Create logout service.
  */
 exports = module.exports = function(promptHandler, actionHandler) {
-  var router = new express.Router();
+  var router = express.Router();
   router.get('/', promptHandler);
   router.post('/', actionHandler);
   
   return router;
 };
 
+// Module annotations.
 exports['@implements'] = 'http://i.bixbyjs.org/http/Service';
 exports['@path'] = '/logout';
 exports['@require'] = [
