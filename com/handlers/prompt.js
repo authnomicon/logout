@@ -1,3 +1,4 @@
+// Module dependencies.
 var path = require('path')
   , ejs = require('ejs');
 
@@ -24,6 +25,7 @@ exports = module.exports = function(store) {
   
   
   return [
+    // TODO: authenticate this call
     require('csurf')(),
     require('flowstate')({ store: store }),
     prompt
@@ -33,6 +35,7 @@ exports = module.exports = function(store) {
   ];
 };
 
+// Module annotations.
 exports['@require'] = [
   'module:flowstate.Store'
 ];
