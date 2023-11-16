@@ -43,7 +43,6 @@ describe('logout/handlers/prompt', function() {
           done();
         })
         .listen();
-    
     }); // should render
     
   }); // handler

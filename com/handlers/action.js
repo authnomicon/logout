@@ -5,11 +5,6 @@ var defer = typeof setImmediate === 'function'
 exports = module.exports = function(sloFactory, authenticator, store) {
   
   function logout(req, res, next) {
-    console.log('!! LOGOUT !!');
-    console.log(req.user);
-    console.log(req.authInfo);
-    
-    
     // TODO: Check the confirm parameter
     req.logout(function(err) {
       if (err) { return next(err); }
@@ -18,45 +13,32 @@ exports = module.exports = function(sloFactory, authenticator, store) {
   }
   
   function logoutOfIDP(req, res, next) {
-    console.log('logoutOfIDP?');
-    console.log(sloFactory);
-    
     if (!sloFactory) { return next(); }
     
-    console.log('CONSTRUCT SERVICE!');
-    
-    // TODO: replace these with context from req.authInfo
-    var provider = 'http://localhost:8085'
-      , protocol = 'openidconnect';
+    // TODO: iterate over methods.  skip non-federated methods
+    var method = req.authInfo.methods[0];
+    var provider = method.provider
+      , protocol = method.protocol;
     
     sloFactory.create(provider, protocol)
       .then(function(service) {
-        console.log('got service!');
-        console.log(service);
-        
         var ctx = {}; // TODO: set this to req.authInfo
         
-        
-        service.logout(ctx, res, next);
+        process.nextTick(function() {
+          service.logout(ctx, res, next);
+        });
       }, function(err) {
-        console.log('rejected!');
-        console.log(err);
-        
         defer(next, err);
       });
-    
-    //next();
   }
   
   function resumeState(req, res, next) {
     res.resumeState(next);
   }
   
-  
   function goHome(req, res, next) {
     res.redirect('/');
   }
-  
   
   
   return [
