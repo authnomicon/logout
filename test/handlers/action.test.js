@@ -36,53 +36,36 @@ describe('logout/handlers/action', function() {
   });
   
   describe('handler', function() {
-    
-    function authenticate(idp, options) {
-      return function(req, res, next) {
-        next();
-      };
-    }
   
     it('should logout of IDP', function(done) {
-      
-      var service = new Object();
-      service.logout = sinon.stub(function(ctx, res, next) {
-        console.log('service logout...');
-        //process.nextTick(next);
-        
+      function terminate(req, res, next) {
         res.redirect('https://server.example.com/logout');
-      })
-      
-      var sloServiceFactory = new Object();
-      sloServiceFactory.create = sinon.stub().resolves(service);
+      }
       var authenticator = new Object();
-      authenticator.authenticate = sinon.spy(authenticate);
+      authenticator.authenticate = function(name, options) {
+        return function(req, res, next) {
+          next();
+        };
+      };
       var store = new Object();
-      var handler = factory(sloServiceFactory, authenticator, store);
+      var handler = factory(terminate, authenticator, store);
 
       chai.express.use(handler)
         .request(function(req, res) {
           req.logout = sinon.stub().yieldsAsync(null);
-          
-          req.authInfo = {
-            methods: [
-              {
-                type: 'federated',
-                provider: 'https://server.example.com',
-                protocol: 'openidconnect',
-                idToken: 'eyJhbGci'
-              }
-            ]
-          };
           req.session = {};
           req.connection = {};
         })
         .finish(function() {
-          expect(sloServiceFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'openidconnect');
-          
+          expect(this.req.logout).to.have.been.calledOnce;
           expect(this).to.have.status(302);
           expect(this.getHeader('Location')).to.equal('https://server.example.com/logout');
           done();
+        })
+        .next(function(err) {
+          // TODO: This is needed to catch assertions thrown in `finish` above.  These
+          // should really be caught in chai-express-handler
+          done(err);
         })
         .listen();
     }); // should logout of IDP

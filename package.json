@@ -39,6 +39,7 @@
     "com": "com"
   },
   "dependencies": {
+    "array-flatten": "^1.1.1",
     "body-parser": "^1.20.2",
     "csurf": "^1.11.0",
     "ejs": "^3.1.6",

@@ -1,3 +1,6 @@
+var flatten = require('array-flatten')
+  , slice = Array.prototype.slice;
+
 var defer = typeof setImmediate === 'function'
   ? setImmediate
   : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
@@ -30,6 +33,8 @@ function dispatch(stack) {
 
 
 exports = module.exports = function(termHandler, authenticator, store) {
+  if (termHandler) { termHandler = flatten([ termHandler ]); }
+  
   
   function logout(req, res, next) {
     // TODO: Check the confirm parameter
@@ -46,7 +51,9 @@ exports = module.exports = function(termHandler, authenticator, store) {
     if (!termHandler) { return next(); }
     
     console.log('HAS TERM HANDLER');
-    return dispatch(termHandler)(null, req, res, next);
+    
+    dispatch(termHandler)(null, req, res, next);
+    return;
     
     
     if (!sloFactory) { return next(); }
