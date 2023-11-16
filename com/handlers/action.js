@@ -2,7 +2,34 @@ var defer = typeof setImmediate === 'function'
   ? setImmediate
   : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
 
-exports = module.exports = function(sloFactory, authenticator, store) {
+function dispatch(stack) {
+  return function(err, req, res, next) {
+    var i = 0;
+
+    function callbacks(err) {
+      var fn = stack[i++];
+      try {
+        if ('route' == err) {
+          next('route');
+        } else if (err && fn) {
+          if (fn.length < 4) return callbacks(err);
+          fn(err, req, res, callbacks);
+        } else if (fn) {
+          if (fn.length < 4) return fn(req, res, callbacks);
+          callbacks();
+        } else {
+          next(err);
+        }
+      } catch (err) {
+        callbacks(err);
+      }
+    }
+    callbacks(err);
+  }
+};
+
+
+exports = module.exports = function(termHandler, authenticator, store) {
   
   function logout(req, res, next) {
     // TODO: Check the confirm parameter
@@ -13,6 +40,15 @@ exports = module.exports = function(sloFactory, authenticator, store) {
   }
   
   function logoutOfIDP(req, res, next) {
+    console.log('FEDERATED LOGOUT?');
+    console.log(termHandler);
+    
+    if (!termHandler) { return next(); }
+    
+    console.log('HAS TERM HANDLER');
+    return dispatch(termHandler)(null, req, res, next);
+    
+    
     if (!sloFactory) { return next(); }
     
     // TODO: iterate over methods.  skip non-federated methods
@@ -55,7 +91,7 @@ exports = module.exports = function(sloFactory, authenticator, store) {
 
 // Module annotations.
 exports['@require'] = [
-  'module:@authnomicon/logout.SLOServiceFactory?',
+  'module:@authnomicon/federated.SessionTerminationHandler?',
   'module:passport.Authenticator',
   'module:flowstate.Store'
 ];
