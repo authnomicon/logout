@@ -28,7 +28,6 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   ],
-  "main": "./lib",
   "assembly": {
     "namespace": "org.authnomicon/logout",
     "components": [
