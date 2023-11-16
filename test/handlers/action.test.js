@@ -37,7 +37,7 @@ describe('logout/handlers/action', function() {
   
   describe('handler', function() {
   
-    it('should logout of IDP', function(done) {
+    it('should call termination handler', function(done) {
       function terminate(req, res, next) {
         res.redirect('https://server.example.com/logout');
       }
@@ -68,9 +68,8 @@ describe('logout/handlers/action', function() {
           done(err);
         })
         .listen();
-    }); // should logout of IDP
+    }); // should call termination handler
   
-    
   }); // handler
   
 });
