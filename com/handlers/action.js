@@ -86,7 +86,10 @@ exports = module.exports = function(termHandler, authenticator, store) {
   
   return [
     require('body-parser').urlencoded({ extended: false }),
-    require('csurf')({ value: function(req){ return req.body && req.body.csrf_token; } }),
+    require('csurf')({
+      ignoreMethods: [ 'HEAD', 'OPTIONS' ],
+      value: function(req){ return (req.body && req.body.csrf_token) || (req.query && req.query.csrf_token); }
+    }),
     require('flowstate')({ store: store }),
     authenticator.authenticate('session'),
     logout,

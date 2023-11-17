@@ -7,6 +7,8 @@ var express = require('express');
 exports = module.exports = function(promptHandler, actionHandler) {
   var router = express.Router();
   router.get('/', promptHandler);
+  // For CSRF handling
+  router.get('/', actionHandler);
   router.post('/', actionHandler);
   
   return router;
