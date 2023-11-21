@@ -5,14 +5,8 @@ var path = require('path')
 exports = module.exports = function(store) {
   
   function prompt(req, res, next) {
-    console.log('LOGOUT?')
-    console.log(req.state);
-    
     if (req.query.csrf_token) { return next('route'); }
-    
-    
-    
-    return;
+    //return;
     
     res.locals.csrfToken = req.csrfToken();
     

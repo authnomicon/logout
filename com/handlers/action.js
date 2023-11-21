@@ -45,12 +45,7 @@ exports = module.exports = function(termHandler, authenticator, store) {
   }
   
   function logoutOfIDP(req, res, next) {
-    console.log('FEDERATED LOGOUT?');
-    console.log(termHandler);
-    
     if (!termHandler) { return next(); }
-    
-    console.log('HAS TERM HANDLER');
     
     dispatch(termHandler)(null, req, res, next);
     return;
