@@ -29,8 +29,8 @@ function dispatch(stack) {
 };
 
 
-exports = module.exports = function(termHandler, authenticator, store) {
-  if (termHandler) { termHandler = flatten([ termHandler ]); }
+exports = module.exports = function(federatedTermHandler, authenticator, store) {
+  if (federatedTermHandler) { federatedTermHandler = flatten([ federatedTermHandler ]); }
   
   function logout(req, res, next) {
     req.logout(function(err) {
@@ -40,9 +40,8 @@ exports = module.exports = function(termHandler, authenticator, store) {
   }
   
   function federatedLogout(req, res, next) {
-    if (!termHandler) { return next(); }
-    
-    dispatch(termHandler)(null, req, res, next);
+    if (!federatedTermHandler) { return next(); }
+    dispatch(federatedTermHandler)(null, req, res, next);
   }
   
   function resume(req, res, next) {
