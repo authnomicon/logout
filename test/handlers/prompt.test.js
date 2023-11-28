@@ -5,7 +5,7 @@ var sinon = require('sinon');
 var factory = require('../../com/handlers/prompt');
 
 
-describe('logout/handlers/prompt', function() {
+describe('handlers/prompt', function() {
   
   it('should create handler', function() {
     var csurfSpy = sinon.spy();

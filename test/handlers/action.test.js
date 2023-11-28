@@ -4,7 +4,7 @@ var $require = require('proxyquire');
 var sinon = require('sinon');
 var factory = require('../../com/handlers/action');
 
-describe('logout/handlers/action', function() {
+describe('handlers/action', function() {
   
   it('should create handler', function() {
     var bodyParserSpy = sinon.spy();
