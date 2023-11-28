@@ -1,9 +1,6 @@
+// Module dependencies.
 var flatten = require('array-flatten')
   , slice = Array.prototype.slice;
-
-var defer = typeof setImmediate === 'function'
-  ? setImmediate
-  : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
 
 function dispatch(stack) {
   return function(err, req, res, next) {
@@ -48,26 +45,6 @@ exports = module.exports = function(termHandler, authenticator, store) {
     if (!termHandler) { return next(); }
     
     dispatch(termHandler)(null, req, res, next);
-    return;
-    
-    
-    if (!sloFactory) { return next(); }
-    
-    // TODO: iterate over methods.  skip non-federated methods
-    var method = req.authInfo.methods[0];
-    var provider = method.provider
-      , protocol = method.protocol;
-    
-    sloFactory.create(provider, protocol)
-      .then(function(service) {
-        var ctx = {}; // TODO: set this to req.authInfo
-        
-        process.nextTick(function() {
-          service.logout(ctx, res, next);
-        });
-      }, function(err) {
-        defer(next, err);
-      });
   }
   
   function resumeState(req, res, next) {
