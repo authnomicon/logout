@@ -5,6 +5,11 @@ var path = require('path')
 exports = module.exports = function(store) {
   
   function prompt(req, res, next) {
+    // If a CSRF token is supplied, invoke the next route (which is expected to
+    // be the action handler).  This allows the application to issue
+    // `GET /logout` requests via redirection and terminate the login session.
+    // This is particularly useful for implementing single logout (SLO), and is
+    // utilized by related packages, such as `@authnomicon/openidconnect`.
     if (req.query.csrf_token) { return next('route'); }
     
     res.locals.csrfToken = req.csrfToken();
