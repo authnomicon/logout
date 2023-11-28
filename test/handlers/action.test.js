@@ -36,19 +36,22 @@ describe('handlers/action', function() {
   });
   
   describe('handler', function() {
+    
+    var noopAuthenticator = new Object();
+    noopAuthenticator.authenticate = function(name, options) {
+      return function(req, res, next) {
+        next();
+      };
+    };
+    var noopStateStore = new Object();
+  
   
     it('should call termination handler', function(done) {
       function terminate(req, res, next) {
         res.redirect('https://server.example.com/logout');
       }
-      var authenticator = new Object();
-      authenticator.authenticate = function(name, options) {
-        return function(req, res, next) {
-          next();
-        };
-      };
-      var store = new Object();
-      var handler = factory(terminate, authenticator, store);
+      
+      var handler = factory(terminate, noopAuthenticator, noopStateStore);
 
       chai.express.use(handler)
         .request(function(req, res) {
@@ -82,14 +85,8 @@ describe('handlers/action', function() {
       function terminate2(req, res, next) {
         res.redirect('https://server.example.com/logout');
       }
-      var authenticator = new Object();
-      authenticator.authenticate = function(name, options) {
-        return function(req, res, next) {
-          next();
-        };
-      };
-      var store = new Object();
-      var handler = factory([ terminate1, terminate2 ], authenticator, store);
+      
+      var handler = factory([ terminate1, terminate2 ], noopAuthenticator, noopStateStore);
 
       chai.express.use(handler)
         .request(function(req, res) {
@@ -110,6 +107,8 @@ describe('handlers/action', function() {
         })
         .listen();
     }); // should call array of termination handlers
+    
+    
   
   }); // handler
   
