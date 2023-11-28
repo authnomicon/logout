@@ -32,26 +32,24 @@ function dispatch(stack) {
 exports = module.exports = function(termHandler, authenticator, store) {
   if (termHandler) { termHandler = flatten([ termHandler ]); }
   
-  
   function logout(req, res, next) {
-    // TODO: Check the confirm parameter
     req.logout(function(err) {
       if (err) { return next(err); }
       next();
     });
   }
   
-  function logoutOfIDP(req, res, next) {
+  function federatedLogout(req, res, next) {
     if (!termHandler) { return next(); }
     
     dispatch(termHandler)(null, req, res, next);
   }
   
-  function resumeState(req, res, next) {
+  function resume(req, res, next) {
     res.resumeState(next);
   }
   
-  function goHome(req, res, next) {
+  function redirect(req, res, next) {
     res.redirect('/');
   }
   
@@ -65,9 +63,9 @@ exports = module.exports = function(termHandler, authenticator, store) {
     require('flowstate')({ store: store }),
     authenticator.authenticate('session'),
     logout,
-    logoutOfIDP,
-    resumeState,
-    goHome
+    federatedLogout,
+    resume,
+    redirect
   ];
 };
 
