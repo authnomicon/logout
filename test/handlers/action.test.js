@@ -53,7 +53,6 @@ describe('handlers/action', function() {
       chai.express.use(handler)
         .request(function(req, res) {
           req.logout = sinon.stub().yieldsAsync(null);
-          
           req.body = {
             csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8'
           };
@@ -69,12 +68,48 @@ describe('handlers/action', function() {
           done();
         })
         .next(function(err) {
-          // TODO: This is needed to catch assertions thrown in `finish` above.  These
+          // FIXME: This is needed to catch assertions thrown in `finish` above.  These
           // should really be caught in chai-express-handler
           done(err);
         })
         .listen();
     }); // should call termination handler
+    
+    it('should call array of termination handlers', function(done) {
+      function terminate1(req, res, next) {
+        next()
+      }
+      function terminate2(req, res, next) {
+        res.redirect('https://server.example.com/logout');
+      }
+      var authenticator = new Object();
+      authenticator.authenticate = function(name, options) {
+        return function(req, res, next) {
+          next();
+        };
+      };
+      var store = new Object();
+      var handler = factory([ terminate1, terminate2 ], authenticator, store);
+
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.logout = sinon.stub().yieldsAsync(null);
+          req.body = {
+            csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8'
+          };
+          req.session = {
+            csrfSecret: 'zbVXAFVVUSXO0_ZZLBYVP9ue'
+          };
+          req.connection = {};
+        })
+        .finish(function() {
+          expect(this.req.logout).to.have.been.calledOnce;
+          expect(this).to.have.status(302);
+          expect(this.getHeader('Location')).to.equal('https://server.example.com/logout');
+          done();
+        })
+        .listen();
+    }); // should call array of termination handlers
   
   }); // handler
   
