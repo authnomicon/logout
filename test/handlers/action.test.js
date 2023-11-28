@@ -108,7 +108,28 @@ describe('handlers/action', function() {
         .listen();
     }); // should call array of termination handlers
     
-    
+    it('should redirect as final handler', function(done) {
+      var handler = factory(undefined, noopAuthenticator, noopStateStore);
+
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.logout = sinon.stub().yieldsAsync(null);
+          req.body = {
+            csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8'
+          };
+          req.session = {
+            csrfSecret: 'zbVXAFVVUSXO0_ZZLBYVP9ue'
+          };
+          req.connection = {};
+        })
+        .finish(function() {
+          expect(this.req.logout).to.have.been.calledOnce;
+          expect(this).to.have.status(302);
+          expect(this.getHeader('Location')).to.equal('/');
+          done();
+        })
+        .listen();
+    }); // should redirect as final handler
   
   }); // handler
   
