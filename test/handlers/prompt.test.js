@@ -45,6 +45,23 @@ describe('logout/handlers/prompt', function() {
         .listen();
     }); // should render
     
+    it('should invoke next route when CSRF token is supplied', function(done) {
+      var store = new Object();
+      var handler = factory(store);
+    
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.query = { csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8' };
+          req.session = {};
+          req.connection = {};
+        })
+        .next(function(err) {
+          expect(err).to.equal('route');
+          done();
+        })
+        .listen();
+    }); // should invoke next route when CSRF token is supplied
+    
   }); // handler
   
 });

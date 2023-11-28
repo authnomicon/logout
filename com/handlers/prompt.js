@@ -6,11 +6,8 @@ exports = module.exports = function(store) {
   
   function prompt(req, res, next) {
     if (req.query.csrf_token) { return next('route'); }
-    //return;
     
     res.locals.csrfToken = req.csrfToken();
-    
-    // NOTE: This will include locals for state.
     res.render('logout', function(err, str) {
       if (err && err.view) {
         var view = path.resolve(__dirname, '../views/prompt.ejs');
