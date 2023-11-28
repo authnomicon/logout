@@ -53,7 +53,13 @@ describe('logout/handlers/action', function() {
       chai.express.use(handler)
         .request(function(req, res) {
           req.logout = sinon.stub().yieldsAsync(null);
-          req.session = {};
+          
+          req.body = {
+            csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8'
+          };
+          req.session = {
+            csrfSecret: 'zbVXAFVVUSXO0_ZZLBYVP9ue'
+          };
           req.connection = {};
         })
         .finish(function() {
