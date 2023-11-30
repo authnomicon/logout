@@ -37,21 +37,21 @@ function dispatch(stack) {
  * This handler logs the user out of a previously established login session.
  *
  * First, the application's local login session is torn down.  This is done
- * by calling `req#logout()`.  This function is typically proveded by `passport`
+ * by calling `req#logout()`.  This function is typically provided by `passport`
  * and will invoke the underlying session manager to terminate the session.
  *
  * Then, if the application is federating with an identity provider (IDP) for
- * single sign-on (for instance, by using `@authnomicon/federated`), the
- * federated session termination handler, will be invoked.  This allows the
+ * single sign-on (SSO) (for instance, by using `@authnomicon/federated`), the
+ * federated session termination handler will be invoked.  This allows the
  * application to send a logout request to the IDP to terminate its session.
- * Thus, the single logical session can be terminated by independently
- * terminating its constituent physical local sessions at both the application
- * and the IDP.
+ * Thus, the complete logical session can be terminated by independently
+ * terminating its constituent physical sessions at both the application and the
+ * IDP.
  *
  * If sessions at related applications were established using SSO via the same
  * IDP, those sessions (which are also part of the same logical session) may
  * also be terminated as a result of the IDP sending subsequent logout requests
- * the the other applications.  Such single logout functionality is the
+ * the the other applications.  Such single logout (SLO) functionality is the
  * responsibility of the IDP and not a concern of the application.
  */
 exports = module.exports = function(federatedTermHandler, authenticator, store) {
