@@ -1,6 +1,5 @@
 // Module dependencies.
-var flatten = require('array-flatten')
-  , slice = Array.prototype.slice;
+var flatten = require('array-flatten');
 
 function dispatch(stack) {
   return function(err, req, res, next) {
@@ -53,6 +52,8 @@ function dispatch(stack) {
  * also be terminated as a result of the IDP sending subsequent logout requests
  * the the other applications.  Such single logout (SLO) functionality is the
  * responsibility of the IDP and not a concern of the application.
+ *
+ * @returns {express.RequestHandler[]}
  */
 exports = module.exports = function(federatedTermHandler, authenticator, store) {
   if (federatedTermHandler) { federatedTermHandler = flatten([ federatedTermHandler ]); }
@@ -95,6 +96,7 @@ exports = module.exports = function(federatedTermHandler, authenticator, store) 
 
 // Module annotations.
 exports['@require'] = [
+  // TODO: Rename this to IDPSessionTerminationRequestHandler (?)
   'module:@authnomicon/federated.SessionTerminationHandler?',
   'module:passport.Authenticator',
   'module:flowstate.Store'
