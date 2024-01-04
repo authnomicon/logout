@@ -1,5 +1,7 @@
 # @authnomicon/logout
 
+Logout components for the Authnomicon project.
+
 <div align="right">
   <sup>Developed by <a href="#authors">Jared Hanson</a>.</sub>
 </div>
