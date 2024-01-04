@@ -8,11 +8,17 @@ var path = require('path')
  * Returns a handler that prompts the user to logout.
  *
  * In most situations, the logout prompt is not used, as logout requests will be
- * submitted directly from the application to the `POST /logout` endpoint.
+ * submitted directly from the application to the `POST /logout` endpoint, thus
+ * invoking the logout action.
+ *
  * However, in some circumstances, such as single logout (SLO), logout will be
  * initiated by another application.  In this case, if the logout request cannot
- * be verified, the user may be prompted to confirm their intent to logout.
- * This confirmation prevents denial of service attacks.
+ * be verified by the application (which is acting as an IDP), the user may be
+ * prompted to confirm their intent to logout.  This confirmation prevents
+ * denial of service attacks.
+ *
+ * @param {flowstate.Store} store - Per-request state store.
+ * @returns {express.RequestHandler[]}
  */
 exports = module.exports = function(store) {
   
