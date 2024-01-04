@@ -53,6 +53,9 @@ function dispatch(stack) {
  * the the other applications.  Such single logout (SLO) functionality is the
  * responsibility of the IDP and not a concern of the application.
  *
+ * @param {?@authnomicon/federated.SessionTerminationHandler} federatedTermHandler - Handler which requests session termination at IDP.
+ * @param {passport.Authenticator} authenticator - Request authenticator.
+ * @param {flowstate.Store} store - Per-request state store.
  * @returns {express.RequestHandler[]}
  */
 exports = module.exports = function(federatedTermHandler, authenticator, store) {
