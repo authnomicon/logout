@@ -11,6 +11,9 @@ var express = require('express');
 exports = module.exports = function(promptHandler, actionHandler) {
   var router = express.Router();
   router.get('/', promptHandler);
+  // Allow the action to be invoked via either `GET` or `POST`.  Both methods
+  // are CSRF-protected, ensuring that only the application itself is able to
+  // invoke the action.
   router.get('/', actionHandler);
   router.post('/', actionHandler);
   

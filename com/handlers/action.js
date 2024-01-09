@@ -24,7 +24,7 @@ function dispatch(stack) {
       }
     }
     callbacks(err);
-  }
+  };
 };
 
 
