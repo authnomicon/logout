@@ -46,7 +46,7 @@ describe('handlers/action', function() {
     var noopStateStore = new Object();
   
   
-    it('should call termination handler', function(done) {
+    it('should call IDP session termination handler', function(done) {
       function terminate(req, res, next) {
         res.redirect('https://server.example.com/logout');
       }
@@ -56,6 +56,8 @@ describe('handlers/action', function() {
       chai.express.use(handler)
         .request(function(req, res) {
           req.logout = sinon.stub().yieldsAsync(null);
+          
+          req.method = 'POST';
           req.body = {
             csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8'
           };
@@ -76,9 +78,9 @@ describe('handlers/action', function() {
           done(err);
         })
         .listen();
-    }); // should call termination handler
+    }); // should call IDP session termination handler
     
-    it('should call array of termination handlers', function(done) {
+    it('should call array of IDP session termination handlers', function(done) {
       function terminate1(req, res, next) {
         next()
       }
@@ -91,6 +93,8 @@ describe('handlers/action', function() {
       chai.express.use(handler)
         .request(function(req, res) {
           req.logout = sinon.stub().yieldsAsync(null);
+          
+          req.method = 'POST';
           req.body = {
             csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8'
           };
@@ -106,7 +110,7 @@ describe('handlers/action', function() {
           done();
         })
         .listen();
-    }); // should call array of termination handlers
+    }); // should call array of IDP session termination handlers
     
     it('should resume state if available', function(done) {
       var handler = factory(undefined, noopAuthenticator, noopStateStore);
@@ -114,6 +118,8 @@ describe('handlers/action', function() {
       chai.express.use(handler)
         .request(function(req, res) {
           req.logout = sinon.stub().yieldsAsync(null);
+          
+          req.method = 'POST';
           req.body = {
             return_to: '/logged-out',
             csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8'
@@ -138,6 +144,8 @@ describe('handlers/action', function() {
       chai.express.use(handler)
         .request(function(req, res) {
           req.logout = sinon.stub().yieldsAsync(null);
+          
+          req.method = 'POST';
           req.body = {
             csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8'
           };
