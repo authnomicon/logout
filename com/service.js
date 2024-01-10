@@ -6,7 +6,11 @@ var express = require('express');
  *
  * Returns an HTTP service that handles logout requests.
  *
- * @returns {express.RequestHandler}
+ * @param {express.RequestHandler} promptHandler - Handler which prompts the
+ *          user to log out.
+ * @param {express.RequestHandler} actionHandler - Handler which logs the user
+ *          out.
+ * @returns {express.Router}
  */
 exports = module.exports = function(promptHandler, actionHandler) {
   var router = express.Router();
