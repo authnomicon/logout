@@ -187,6 +187,30 @@ describe('handlers/action', function() {
         })
         .listen();
     }); // should handle GET method with CSRF token in query
+    
+    it('should next with error when logout fails', function(done) {
+      var handler = factory(undefined, noopAuthenticator, noopStateStore);
+
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.logout = sinon.stub().yieldsAsync(new Error('something went wrong'));
+          
+          req.method = 'POST';
+          req.body = {
+            csrf_token: '3aev7m03-1WTaAw4lJ_GWEMkjwFBu_lwNWG8'
+          };
+          req.session = {
+            csrfSecret: 'zbVXAFVVUSXO0_ZZLBYVP9ue'
+          };
+          req.connection = {};
+        })
+        .next(function(err) {
+          expect(err).to.be.an.instanceof(Error);
+          expect(err.message).to.equal('something went wrong');
+          done();
+        })
+        .listen();
+    }); // should next with error when logout fails
   
   }); // handler
   
