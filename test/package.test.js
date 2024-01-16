@@ -12,7 +12,8 @@ describe('@authnomicon/logout', function() {
     it('should have assembly metadata', function() {
       expect(json.assembly.namespace).to.equal('org.authnomicon/logout');
       
-      expect(json.assembly.components).to.have.length(1);
+      expect(json.assembly.components).to.have.length(2);
+      expect(json.assembly.components).to.include('prompt');
       expect(json.assembly.components).to.include('service');
     });
   });
