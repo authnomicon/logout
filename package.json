@@ -1,6 +1,6 @@
 {
   "name": "@authnomicon/logout",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Logout components for the Authnomicon project.",
   "keywords": [
     "session"
