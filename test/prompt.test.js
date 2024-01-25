@@ -9,6 +9,11 @@ var factory = require('../com/prompt');
 
 describe('prompt', function() {
   
+  it('should be annotated', function() {
+    expect(factory['@implements']).to.deep.equal('http://i.authnomicon.org/prompts/http/Prompt');
+    expect(factory['@name']).to.equal('logout');
+  });
+  
   it('should create handler', function() {
     var handler = factory();
     expect(handler).to.be.a('function');
